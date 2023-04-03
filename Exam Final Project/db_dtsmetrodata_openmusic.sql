@@ -7,8 +7,6 @@ create table dbo.albums
     id        int identity not null,
     name      varchar(50)  not null,
     year      smallint     not null,
-    cover_url varchar(max),
-    is_single bit,
     primary key (id)
 );
 
@@ -38,7 +36,6 @@ create table dbo.users
     username  varchar(25)  not null,
     password  varchar(max) not null,
     fullname  varchar(50)  not null,
-    is_active bit,
     primary key (id),
     unique (username)
 );
@@ -49,10 +46,10 @@ create unique index users_pkey
 create unique index users_username_key
     on dbo.users (username);
 
-create table dbo.authentications
-(
-    token varchar(max) not null
-);
+-- create table dbo.authentications
+-- (
+--     token varchar(max) not null
+-- );
 
 create table dbo.playlists
 (
@@ -80,31 +77,31 @@ create table dbo.playlists_songs
 create unique index playlists_songs_pkey
     on dbo.playlists_songs (id);
 
-create table dbo.collaborations
-(
-    id          int identity not null,
-    playlist_id int          not null,
-    user_id     int          not null,
-    primary key (id),
-    foreign key (playlist_id) references dbo.playlists (id),
-    foreign key (user_id) references dbo.users (id)
-);
+-- create table dbo.collaborations
+-- (
+--     id          int identity not null,
+--     playlist_id int          not null,
+--     user_id     int          not null,
+--     primary key (id),
+--     foreign key (playlist_id) references dbo.playlists (id),
+--     foreign key (user_id) references dbo.users (id)
+-- );
+-- 
+-- create unique index collaborations_pkey
+--     on dbo.collaborations (id);
 
-create unique index collaborations_pkey
-    on dbo.collaborations (id);
-
-create table dbo.user_album_likes
-(
-    id       int identity not null,
-    user_id  int          not null,
-    album_id int          not null,
-    primary key (id),
-    foreign key (user_id) references dbo.users (id),
-    foreign key (album_id) references dbo.albums (id)
-);
-
-create unique index user_album_likes_pkey
-    on dbo.user_album_likes (id);
-
-create unique index "user liked album"
-    on dbo.user_album_likes (user_id, album_id);
+-- create table dbo.user_album_likes
+-- (
+--     id       int identity not null,
+--     user_id  int          not null,
+--     album_id int          not null,
+--     primary key (id),
+--     foreign key (user_id) references dbo.users (id),
+--     foreign key (album_id) references dbo.albums (id)
+-- );
+-- 
+-- create unique index user_album_likes_pkey
+--     on dbo.user_album_likes (id);
+-- 
+-- create unique index "user liked album"
+--     on dbo.user_album_likes (user_id, album_id);
