@@ -83,6 +83,47 @@ public class AlbumRepository : IAlbumRepository
         return album;
     }
 
+    public List<Album> FindAlbumsContainingName(string name)
+    {
+        List<Album> albums = new List<Album>();
+        try
+        {
+            DataTable dataTable = _sqlServerDb.WithDataTable(command =>
+            {
+                command.CommandText = "SELECT * FROM albums WHERE name LIKE '%' + @name +'%';";
+                command.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "@name",
+                    SqlValue = name,
+                    SqlDbType = SqlDbType.VarChar
+                });
+            
+                return command;
+            });
+
+            if (dataTable.Rows.Count < 1)
+            {
+                throw new Exception("Album not found");
+            }
+            
+            foreach (DataRow row in dataTable.Rows)
+            {
+                albums.Add(new Album
+                {
+                    Id = row.Field<int>("id"),
+                    Name = row.Field<string>("name"),
+                    Year = row.Field<Int16>("year")
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return albums;
+    }
+
     public List<Album> ListAll()
     {
         List<Album> albums = new List<Album>();
