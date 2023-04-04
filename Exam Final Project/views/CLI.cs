@@ -78,7 +78,7 @@ public class CLI
         }
         catch (Exception e)
         {
-            Console.WriteLine("Invalid menu2");
+            Console.WriteLine("Invalid menu");
         }
     }
 
