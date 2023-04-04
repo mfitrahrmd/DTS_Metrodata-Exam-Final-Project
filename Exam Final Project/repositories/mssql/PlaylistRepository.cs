@@ -118,6 +118,48 @@ public class PlaylistRepository : IPlaylistRepository
         return playlists;
     }
 
+    public List<Playlist> ListByOwner(int owner)
+    {
+        List<Playlist> playlists = new List<Playlist>();
+        try
+        {
+            DataTable dataTable = _sqlServerDb.WithDataTable(command =>
+            {
+                command.CommandText = "SELECT * FROM playlists WHERE owner = @owner;";
+                command.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "@owner",
+                    Value = owner,
+                    SqlDbType = SqlDbType.Int
+                });
+                
+                return command;
+            });
+
+            if (dataTable.Rows.Count < 1)
+            {
+                throw new Exception("Playlists is empty");
+            }
+            
+            foreach (DataRow row in dataTable.Rows)
+            {
+                playlists.Add(new Playlist
+                {
+                    Id = row.Field<int>("id"),
+                    Name = row.Field<string>("name"),
+                    Owner = row.Field<int>("owner")
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return playlists;
+    }
+
+    
     public void UpdateOneById(int id, Playlist data)
     {
         var rowAffected = _sqlServerDb.WithTx(command =>
