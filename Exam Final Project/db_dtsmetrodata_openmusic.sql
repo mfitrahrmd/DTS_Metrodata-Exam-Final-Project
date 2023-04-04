@@ -46,11 +46,6 @@ create unique index users_pkey
 create unique index users_username_key
     on dbo.users (username);
 
--- create table dbo.authentications
--- (
---     token varchar(max) not null
--- );
-
 create table dbo.playlists
 (
     id    int identity not null,
@@ -76,32 +71,3 @@ create table dbo.playlists_songs
 
 create unique index playlists_songs_pkey
     on dbo.playlists_songs (id);
-
--- create table dbo.collaborations
--- (
---     id          int identity not null,
---     playlist_id int          not null,
---     user_id     int          not null,
---     primary key (id),
---     foreign key (playlist_id) references dbo.playlists (id),
---     foreign key (user_id) references dbo.users (id)
--- );
--- 
--- create unique index collaborations_pkey
---     on dbo.collaborations (id);
-
--- create table dbo.user_album_likes
--- (
---     id       int identity not null,
---     user_id  int          not null,
---     album_id int          not null,
---     primary key (id),
---     foreign key (user_id) references dbo.users (id),
---     foreign key (album_id) references dbo.albums (id)
--- );
--- 
--- create unique index user_album_likes_pkey
---     on dbo.user_album_likes (id);
--- 
--- create unique index "user liked album"
---     on dbo.user_album_likes (user_id, album_id);
