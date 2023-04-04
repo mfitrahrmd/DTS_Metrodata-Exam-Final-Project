@@ -178,4 +178,43 @@ public class UserRepository : IUserRepository
             throw new Exception("Failed to delete user");
         }
     }
+
+    public User FindOneByUsername(string username)
+    {
+        User user = null;
+        try
+        {
+            DataTable dataTable = _sqlServerDb.WithDataTable(command =>
+            {
+                command.CommandText = "SELECT * FROM users WHERE username = @username;";
+                command.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "@username",
+                    SqlValue = username,
+                    SqlDbType = SqlDbType.VarChar
+                });
+                
+                return command;
+            });
+
+            if (dataTable.Rows.Count < 1)
+            {
+                throw new Exception("User not found");
+            }
+            
+            user = new User
+            {
+                Id = dataTable.Rows[0].Field<int>("id"),
+                Username = dataTable.Rows[0].Field<string>("username"),
+                Password = dataTable.Rows[0].Field<string>("password"),
+                Fullname = dataTable.Rows[0].Field<string>("fullname")
+            };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return user;
+    }
 }

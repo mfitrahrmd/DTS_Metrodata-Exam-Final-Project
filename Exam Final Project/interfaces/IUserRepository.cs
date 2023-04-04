@@ -4,4 +4,5 @@ namespace Exam_Final_Project.interfaces;
 
 public interface IUserRepository : IBaseRepository<User>
 {
+    User FindOneByUsername(string username);
 }
