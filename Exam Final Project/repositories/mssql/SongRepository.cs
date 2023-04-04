@@ -158,6 +158,53 @@ public class SongRepository : ISongRepository
 
         return songs;
     }
+    
+    public List<Song> FindSongsContainingTitle(string title)
+    {
+        List<Song> songs = new List<Song>();
+        try
+        {
+            DataTable dataTable = _sqlServerDb.WithDataTable(command =>
+            {
+                command.CommandText = "SELECT * FROM songs WHERE title LIKE '%' + @title +'%';";
+                command.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "@title",
+                    SqlValue = title,
+                    SqlDbType = SqlDbType.VarChar
+                });
+            
+                return command;
+            });
+
+            if (dataTable.Rows.Count < 1)
+            {
+                throw new Exception("Song not found");
+            }
+            
+            foreach (DataRow row in dataTable.Rows)
+            {
+                songs.Add(new Song
+                {
+                    Id = row.Field<int>("id"),
+                    Title = row.Field<string>("title"),
+                    Genre = row.Field<string>("genre"),
+                    Performer = row.Field<string>("performer"),
+                    Year = row.Field<Int16>("year"),
+                    Duration = row.Field<Int16>("duration"),
+                    IsExplicit = row.Field<bool>("is_explicit"),
+                    AlbumId = row.Field<int>("album_id")
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return songs;
+    }
+
 
     public void UpdateOneById(int id, Song data)
     {
