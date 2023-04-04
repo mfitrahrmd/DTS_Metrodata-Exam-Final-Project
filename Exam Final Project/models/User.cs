@@ -22,7 +22,6 @@ public class User
     {
         return $"Id : {Id}\n" +
                $"Username : {Username}\n" +
-               $"Password : {Password}\n" +
                $"Fullname : {Fullname}\n";
     }
 }
